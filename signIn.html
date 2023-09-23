@@ -19,21 +19,23 @@
             <div class=" p-4  rounded ">
 
                 <!-- sign Up -->
-                <h2 id="h1" class="text-gray-200 text-2xl font-bold mx-1">Sign <span class="text-yellow-500">In</span></h2>
-                <br>
+                <h2 id="h1" class="text-gray-200 text-2xl font-bold mb-2 mx-1">Sign <span class="text-yellow-500">In</span></h2>
+                <p  class="ml-1  mb-2   text-yellow-100 font-semibold bg-green-500 opacity-50 text-center text-sm"></p>
+            
                 <form id="form" class="grid grid-cols-5 gap-x-1"  autocomplete="on">
 
-                    <div class="col-span-5">
-                        <input id="emailAddr" class=" border border-white border-1 p-1 m-1 text-gray-200 w-full w-full bg-black  opacity-50 placeholder-white-400" type="email" placeholder="Enter email">
-                        <p  class="alert text-yellow-500 font-bold text-sm"></p>
+                    <div class="contents">
+                        <input id="emailAddr" class="col-span-5 border border-white border-1 p-1 m-1 text-gray-200 w-full w-full bg-black  opacity-50 placeholder-white-400" type="email" placeholder="Enter email">
+                        <p  class="alert col-span-5 text-yellow-500 font-bold text-sm"></p>
                     </div >
                   
-                    <div class="col-span-4">
-                        <input id="password" class="password border border-white border-1 p-1 m-1 text-gray-200 w-full inline-block bg-black opacity-50 placeholder-white-400" type="password" placeholder="password, 6 - 10 charachers">
-                        <p  class="alert text-yellow-500 font-bold text-sm"></p>
+                    <div class="contents">
+                        <input id="password" class="password col-span-3 border border-white border-1 p-1 m-1 text-gray-200 w-full inline-block bg-black opacity-50 placeholder-white-400" type="password" placeholder="password, 6 - 10 charachers">
+                        <button id="sign-in" class="p-1 m-1 opacity-80 border border-white border-1 shadow-lg text-white bg-black w-full hover:bg-white hover:text-gray-900 col-span-2">sign in</button>
+                        <p  class="alert col-span-4 text-yellow-500 font-bold text-sm"></p>
                     </div>
                     
-                    <button id="sign-in" class="p-1 m-1 opacity-80 border border-white border-1 shadow-lg text-white bg-black w-full hover:bg-white hover:text-gray-900 col-span-1">sign up</button>
+                    
                 </form>
             </div>
             <center>
