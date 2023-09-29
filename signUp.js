@@ -1,70 +1,92 @@
-$(document).ready(function(){
-  var name = "";
-  var box = ""; 
-  var alert = ""; 
+document.addEventListener('DOMContentLoaded', function() {
   
-  var password = $("#password").val(); 
-  var confirmPassword = $("#confirm-password").val();
-  var firstName = "";
-  var lastName = ""; //$(".last-name").val();
-  var fatherName = ""; //$(".father-name").val();
-  var cnic =  $("#cnic").val();
-  var contact =  $("#contact").val();
-  var email = ""; // $("#emailAddr").val(); 
- updatesignUpButton(firstName, lastName, fatherName, cnic, contact, email, password, confirmPassword, matchPassword, lengthPassword, validateEmail, validateContact, validateCNIC)
   
+  // var password = $("#password").val(); 
+  // var confirmPassword = $("#confirm-password").val();
+  // var firstName = document.getElementsByClassName("first-name");
+  // var lastName = document.getElementsByClassName("last-name");
+  // var fatherName = document.getElementsByClassName("father-name");
+  // var cnic =  $("#cnic").val();
+  // var contact =  $("#contact").val();
+  // var email = ""; // $("#emailAddr").val(); 
+ 
+  var firstBool = false; 
+  document.getElementById("first-name").addEventListener("input", function() {
+    firstBool = validateName (this.value, this, this.nextElementSibling);
+  })
 
-  $(".name").on("input", function () {
-    var inputValue = $(this).val();
-    if ($(this).hasClass("first-name")) {
-      firstName = inputValue;
-    } else if ($(this).hasClass("last-name")) {
-      lastName = inputValue;
-    } else if ($(this).hasClass("father-name")) {
-      fatherName = inputValue;
-    }
-    validateName(inputValue, $(this), $(this).next());
-    updatesignUpButton(firstName, lastName, fatherName, cnic, contact, email, password, confirmPassword, matchPassword, lengthPassword, validateEmail, validateContact, validateCNIC)
+  var lastBool = false; 
+  document.getElementById("last-name").addEventListener("input", function() {
+    lastBool = validateName (this.value, this, this.nextElementSibling);
+  })
+
+  var fatherBool = false; 
+  document.getElementById("father-name").addEventListener("input", function() {
+    fatherBool = validateName (this.value, this, this.nextElementSibling);
+  })
+
+  var mailBool = false; 
+  document.getElementById("emailAddr").addEventListener("input", function(){
+    mail = this.value;
+    mailBool = validateEmail(mail);
+    })
+
+  var cnicBool = false; 
+  document.getElementById("cnic").addEventListener("input", function(){
+    cnic = this.value;
+    cnicBool = validateCNIC(cnic);
+    })
+
+  var contactBool = false; 
+  document.getElementById("contact").addEventListener("input", function(){
+    contact = this.value;
+    contactBool = validateContact(contact);
+    })
+
+  var passwordBool = false; 
+  document.getElementById("password").addEventListener("input", function(){
+    password = this.value;
+    box  = this;
+    alert = box.nextElementSibling;
+    passwordBool = lengthPassword (password, box, alert);
+    })
+
+  var confirmPasswordBool = false; 
+  document.getElementById("confirm-password").addEventListener("input", function(){
+    confirmPassword = this.value;
+    box  = this;
+    alert = box.nextElementSibling;
+    confirmPasswordBool = matchPassword (confirmPassword, box, alert);
+    // pdatesignUpButton(firstName, lastName, fatherName, cnic, contact, email, password, confirmPassword, matchPassword, lengthPassword, validateEmail, validateContact, validateCNIC)
+  })
+
+
+   // Event for Sign-In CLICK:
+successNote = document.getElementById("h1").nextElementSibling;
+document.getElementById("sign-up").addEventListener("click", function(event) {
+  event.preventDefault(); // Prevent the form from submitting
+
+  // Check if both boolMail and boolPass are true
+  if(passwordBool && confirmPasswordBool && mailBool && cnicBool && contactBool && firstBool && lastBool && fatherBool) {
     
-  });
+    successNote.innerHTML= "you are successfully signed in";
+    successNote.style.border = "1px solid white";
+    successNote.style.padding = "3px";
+    successNote.style.backgroundColor = "#10B981"
 
-  $("#emailAddr").on("input", function(){
-    mail = $(this).val();
-    validateEmail(mail);
-    updatesignUpButton(firstName, lastName, fatherName, cnic, contact, email, password, confirmPassword, matchPassword, lengthPassword, validateEmail, validateContact, validateCNIC)
-  })
+    // Add a delay before reloading the page
+    setTimeout(function() {
+      location.reload(); // Reload the page
+    }, 1000); // 1000 milliseconds = 1 seconds
+  }
 
-  $("#cnic").on("input", function(){
-    cnic = $(this).val();
-    validateCNIC(cnic);
-    updatesignUpButton(firstName, lastName, fatherName, cnic, contact, email, password, confirmPassword, matchPassword, lengthPassword, validateEmail, validateContact, validateCNIC)
-  })
-
-  $("#contact").on("input", function(){
-    contact = $(this).val();
-    validateContact(contact);
-    updatesignUpButton(firstName, lastName, fatherName, cnic, contact, email, password, confirmPassword, matchPassword, lengthPassword, validateEmail, validateContact, validateCNIC)
-  })
-
-  $("#password").on("input", function(){
-    password = $(this).val();
-    box  = $(this);
-    alert = box.next();
-    lengthPassword (password, box, alert);
-    updatesignUpButton(firstName, lastName, fatherName, cnic, contact, email, password, confirmPassword, matchPassword, lengthPassword, validateEmail, validateContact, validateCNIC)
-  })
-
-  $("#confirm-password").on("input", function(){
-    confirmPassword = $(this).val();
-    box  = $(this);
-    alert = box.next();
-    matchPassword (confirmPassword, box, alert);
-    updatesignUpButton(firstName, lastName, fatherName, cnic, contact, email, password, confirmPassword, matchPassword, lengthPassword, validateEmail, validateContact, validateCNIC)
-  })
-
-  $("#sign-up").click(function() {
-    alert("sign in succeeded")
-  })
+  else {
+    successNote.innerHTML= "please fill credentials as prescribed!";
+    successNote.style.border = "1px solid white";
+    successNote.style.padding = "3px";
+    successNote.style.backgroundColor = "red"
+  }
+});
 
 
 
@@ -72,38 +94,38 @@ $(document).ready(function(){
 function lengthPassword(password, box, alert) {
 
   if (password === "") {
-    alert.text("* this field is mandatory.");
-    box.css( "border", "4px double red" );
+    alert.innerHTML = "* this field is mandatory.";
+    box.style.border = "4px double red";
     return false;
   } else if (password.length < 6) {
-      alert.text("Password must be at least 6 characters.");
-      box.css( "border", "4px double red" );
+      alert.innerHTML ="Password must be at least 6 characters.";
+      box.style.border = "4px double red";
       return false;
   } else if (password.length > 10) {
-      alert.text("Password cannot be longer than 10 characters.");
-      box.css( "border", "4px double red" );
+      alert.innerHTML ="Password cannot be longer than 10 characters.";
+      box.style.border = "4px double red";
       return false;
   } else if (password.length >= 6 && password.length <= 10) {
-    alert.empty();
-    box.css( "border", "4px double green" );
+    alert.innerHTML = "";
+    box.style.border = "4px double green";
     return true;
   }
 }
 /////////////////////////////////////////////////////////////////////////
 function matchPassword(confirmPassword, box, alert) {
   if (confirmPassword === "") {
-    alert.text("* this field is mandatory.");
-    box.css( "border", "4px double red" );
+    alert.innerHTML = "* this field is mandatory.";
+    box.style.border =  "4px double red";
     return false;
   }
   else if (password !== confirmPassword) {
-      alert.text("Passwords do not match.");
-      box.css( "border", "4px double red" );
+      alert.innerHTML = "Passwords do not match.";
+      box.style.border =  "4px double red";
       return false;
   }
   else {
-    box.css( "border", "4px double green" );
-    alert.empty();
+    box.style.border =  "4px double green";
+    alert.innerHTML = "";
     return true;
   } 
 }
@@ -114,14 +136,14 @@ function validateEmail(inputText) {
   var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   if(inputText.match(mailformat)) {
 
-    $("#emailAddr").css( "border", "4px double green" );
-    $("#emailAddr").next().empty();
+    document.getElementById("emailAddr").style.border = "4px double green";
+    document.getElementById("emailAddr").nextElementSibling.innerHTML = "";
     return true;
   }
 
   else {
-    $("#emailAddr").css( "border", "4px double red" );
-    $("#emailAddr").next().text("* You have entered an invalid email address!");
+    document.getElementById("emailAddr").style.border = "4px double red";
+    document.getElementById("emailAddr").nextElementSibling.innerHTML = "* You have entered an invalid email address!";
     return false;
   }
 }
@@ -132,14 +154,14 @@ function validateCNIC(inputNum) {
   var cnicFormat = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
   if(inputNum.match(cnicFormat)) {
 
-    $("#cnic").css( "border", "4px double green" );
-    $("#cnic").next().empty();
+    document.getElementById("cnic").style.border = "4px double green";
+    document.getElementById("cnic").nextElementSibling.innerHTML = "";
     return true;
   }
 
   else {
-    $("#cnic").css( "border", "4px double red" );
-    $("#cnic").next().text("* You have entered an invalid CNIC number!");
+    document.getElementById("cnic").style.border = "4px double red";
+    document.getElementById("cnic").nextElementSibling.innerHTML = "* You have entered an invalid CNIC number!";
     return false;
   }
 }
@@ -149,56 +171,46 @@ function validateContact(inputContact) {
   var contactFormat = /^[0][3][0-9]{9}$/;
   if(inputContact.match(contactFormat)) {
 
-    $("#contact").css( "border", "4px double green" );
-    $("#contact").next().empty();
+    document.getElementById("contact").style.border = "4px double green";
+    document.getElementById("contact").nextElementSibling.innerHTML = "";
     return true;
   }
 
   else {
-    $("#contact").css( "border", "4px double red" );
-    $("#contact").next().text("* You have entered an invalid Contact Number!");
+    document.getElementById("contact").style.border = "4px double red";
+    document.getElementById("contact").nextElementSibling.innerHTML = "* You have entered an invalid Contact Number!";
     return false;
   }
 }
 ////////////////////////////////
 
-function validateName (name, box, alert) {
-    if(name == "") {
-      alert.text("* this field is mandatory.");
-      box.css( "border", "3px double red" );
-    }
-    else if (name.length > 0 && name.length < 4 ) {
-      for (var i = 0; i < name.length; i++) {
-        if(name[i] === " ") {
-          alert.text("* no spaces allowed.");
-          box.css( "border", "3px double red" );
-          return;
-        }
-      
-        else {
-          alert.text("* the name is too short.");
-          box.css( "border", "3px double yellow" );
-        }
-      }
-      
-    }
-
-    else if (name.length >= 4) {
-      for (var i = 0; i < name.length; i++) {
-        if(name[i] === " ") {
-          alert.text("* no spaces allowed.");
-          box.css( "border", "3px double red" );
-          return;
-        }
-      
-        else {
-          alert.empty();
-          box.css( "border", "3px double green" );
-        }
+function validateName(name, box, alert) {
+  if (name.trim() === "") {
+    alert.innerHTML = "* This field is mandatory.";
+    box.style.border = "3px double red";
+    return false;
+  } else if (name.length < 4) {
+    alert.innerHTML = "* The name is too short.";
+    box.style.border = "3px double yellow";
+    return false;
+  } else {
+    var containsSpace = false;
+    for (var i = 0; i < name.length; i++) {
+      if (name[i] === " ") {
+        containsSpace = true;
       }
     }
-
+    if (containsSpace) {
+      alert.innerHTML = "* No spaces allowed.";
+      box.style.border = "3px double red";
+      return false;
+    } else {
+      alert.innerHTML = "";
+      box.style.border = "3px double green";
+      return true;
+    }
   }
+}
 
   /////////////checking sign in ///
   // disabling sign up button if 
@@ -226,97 +238,8 @@ function validateName (name, box, alert) {
   }
   
   
-});
 
 
 
 
-/////////////////////////////////  sign up partial code    ////////////////////////////////////
-document.addEventListener("DOMContentLoaded", function() {
-
-  // Definitions:
-  var boolMail = false;
-  var boolPass = false;
-
-  var signUp = document.getElementById("sign-up");
-  var emailBox = document.getElementById("emailAddr");
-  var passwordBox = document.getElementById("password");
-  successNote = document.getElementById("h1").nextElementSibling;
-
-  // Event for E-Mail:
-  emailBox.addEventListener("input", function(){
-    var email = emailBox.value; 
-      var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-      boolMail = false;
-      if (email === "") {
-        emailBox.nextElementSibling.innerHTML = "* this field is mandatory.";
-        emailBox.style.border = "4px double red";
-        boolMail = false;
-      } 
-      else if(email.match(mailformat)) {
-          emailBox.style.border =  "4px double green";
-          emailBox.nextElementSibling.textContent = "";
-          boolMail = true;
-        }
-      
-        else {
-          emailBox.style.border = "4px double red";
-          emailBox.nextElementSibling.innerHTML = ("* You have entered an invalid email address!");
-          boolMail = false;
-        }
- })
-
-    // Event for Password: 
-    passwordBox.addEventListener("input", function(){
-    var password = passwordBox.value;
-        alert = signUp.nextElementSibling;
-        boolPass = false;
-        
-      if (password === "") {
-          alert.innerHTML = "* this field is mandatory.";
-          passwordBox.style.border = "4px double red";
-          boolPass = false; 
-      } 
-      else if (password.length < 6) {
-          alert.innerHTML = "Password must be at least 6 characters.";
-          passwordBox.style.border = "4px double red";
-          boolPass = false;
-      } 
-      else if (password.length > 10) {
-          alert.innerHTML = "Password cannot be longer than 10 characters.";
-          passwordBox.style.border = "4px double red";
-          boolPass = false;
-      }
-       else if (password.length >= 6 && password.length <= 10) {
-          alert.textContent = "";
-          passwordBox.style.border = "4px double green";
-          boolPass = true;
-      }
-    })
-
-// Event for sign-up CLICK:
-signUp.addEventListener("click", function(event) {
-  event.preventDefault(); // Prevent the form from submitting
-
-  // Check if both boolMail and boolPass are true
-  if (boolMail && boolPass) {
-    
-    successNote.innerHTML= "you are successfully signed up";
-    successNote.style.border = "1px solid white";
-    successNote.style.padding = "3px";
-    successNote.style.backgroundColor = "#10B981"
-
-    // Add a delay before reloading the page
-    setTimeout(function() {
-      location.reload(); // Reload the page
-    }, 1000); // 1000 milliseconds = 1 seconds
-  }
-
-  else {
-    successNote.innerHTML= "please fill credentials as prescribed!";
-    successNote.style.border = "1px solid white";
-    successNote.style.padding = "3px";
-    successNote.style.backgroundColor = "red"
-  }
-});
 });
